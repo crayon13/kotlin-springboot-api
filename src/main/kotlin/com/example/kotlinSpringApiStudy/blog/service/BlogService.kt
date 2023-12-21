@@ -29,7 +29,7 @@ class BlogService(
 
         when {
             blogDto.page!! < 1 -> messageList.add(ExceptionMessage.LESS_THEN_MIN_PAGE)
-            blogDto.page!! > 50 -> messageList.add(ExceptionMessage.MORE_THEN_MAX_PAGE)
+            blogDto.page > 50 -> messageList.add(ExceptionMessage.MORE_THEN_MAX_PAGE)
         }
 
         if (messageList.isNotEmpty()) {
