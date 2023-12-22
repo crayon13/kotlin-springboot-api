@@ -64,8 +64,8 @@ val test by tasks.getting(Test::class) {
 
 jacoco {
 	// JaCoCo 버전
-	toolVersion = "0.8.8"
-
+	toolVersion = "0.8.9"
+	reportsDirectory = layout.buildDirectory.dir("jacocoReport")
 //  테스트결과 리포트를 저장할 경로 변경
 //  default는 "${project.reporting.baseDir}/jacoco"
 //  reportsDir = file("$buildDir/customJacocoReportDir")
@@ -78,6 +78,7 @@ tasks.jacocoTestReport {
 		xml.required.set(true)
 		csv.required.set(false)
 //  각 리포트 타입 마다 리포트 저장 경로를 설정할 수 있습니다.
+//		html.outputLocation = layout.buildDirectory.dir("jacocoReport/html")
 //  html.destination = file("$buildDir/jacocoHtml")
 //  xml.destination = file("$buildDir/jacoco.xml")
 	}
@@ -85,12 +86,30 @@ tasks.jacocoTestReport {
 tasks.jacocoTestCoverageVerification {
 	violationRules {
 		rule {
-			element = "CLASS"
+			limit {
+				minimum = "0.5".toBigDecimal()
+			}
+		}
 
+		rule {
+			isEnabled = false
+			element = "CLASS"
 			limit {
 				counter = "BRANCH"
 				value = "COVEREDRATIO"
 				minimum = "0.00".toBigDecimal()
+			}
+		}
+
+		rule {
+			isEnabled = false
+			element = "CLASS"
+			includes = listOf("org.gradle.*")
+
+			limit {
+				counter = "LINE"
+				value = "TOTALCOUNT"
+				maximum = "0.3".toBigDecimal()
 			}
 		}
 	}
